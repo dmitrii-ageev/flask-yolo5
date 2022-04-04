@@ -1,7 +1,7 @@
 FLASK-YOLO5
 ===========
 
-This simple Python script just creates a WEB application that can be used for 
+This simple Python script creates a WEB application that can be used for 
 object detection in images using UI or REST API call.<br><br>
 
 ## INSTALLATION
