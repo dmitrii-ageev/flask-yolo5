@@ -97,8 +97,8 @@ def upload(filename):
     return send_from_directory(app.config['UPLOAD_PATH'], filename)
 
 
-@app.route('/api/check_image', methods=['POST'])
-def check_image():
+@app.route('/api/inspect_image', methods=['POST'])
+def inspect_image():
     if request.is_json:
         content = request.json
         if 'body' in content.keys() and 'name' in content.keys():
