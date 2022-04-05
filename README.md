@@ -24,7 +24,7 @@ pip3 install -r requirements.txt
 2. Open address http://127.0.0.1:5000 in the WEB browser.
 3. Optionally, send a REST API call to http://127.0.0.1:5000/api/inspect_image.
 
-**NOTE:** The API request should look like this:
+**NOTE:** An API request should look like this:
 ```
 {
     "name": "image_file_name.jpg",
