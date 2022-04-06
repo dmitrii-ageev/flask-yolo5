@@ -1,4 +1,4 @@
-#!/usr/bin/env flask
+#!/usr/bin/env python3
 
 # importing the sys module and adding path to yolo5 modules
 import os
@@ -128,4 +128,8 @@ def inspect_image():
     abort(415)
 
 
-MODEL = init_model(MODEL_PATH)
+if __name__ == '__main__':
+    MODEL = init_model(MODEL_PATH)
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.run(host='0.0.0.0')
