@@ -8,6 +8,8 @@ import imghdr
 from werkzeug.utils import secure_filename
 from PIL import Image
 import torch
+import cv2
+import numpy as np
 import base64
 
 # Constants
@@ -59,8 +61,9 @@ def process_image(image, save_file=False):
     else:
         data = results.pandas().xyxy[0].to_dict('dict')
         number_of_objects = len(data['class'])
-        result = [dict()] * number_of_objects
+        result = list(dict())
         for index in range(number_of_objects):
+            result.append(dict())
             for key in KEYS:
                 result[index][key] = data[key][index]
         return jsonify(result)
@@ -119,11 +122,8 @@ def inspect_image():
                     image_ext != validate_image_header(image_body):
                 abort(415)
 
-            image_file = os.path.join(app.config['UPLOAD_PATH'], image_name)
-            file = open(image_file, 'wb')
-            file.write(image_body)
-            file.close
-            return process_image(image_file)
+            image = cv2.imdecode(np.asarray(bytearray(image_body), dtype="uint8"), cv2.IMREAD_COLOR)
+            return process_image(image)
     # Fail with 'Unsupported Media Type' error
     abort(415)
 
