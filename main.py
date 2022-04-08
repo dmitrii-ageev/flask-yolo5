@@ -19,7 +19,6 @@ TEMPLATE_FILE = 'index.html'
 # NOTE: Provide path to the model if you'd like to use the custom one.
 # Like this: MODEL_PATH = './models/model.pt'
 MODEL_PATH = ''
-KEYS = ['class', 'confidence', 'name', 'xmax', 'xmin', 'ymax', 'ymin']
 MAX_PAYLOAD = 4096*4096
 
 # Flask application settings
@@ -64,7 +63,7 @@ def process_image(image, save_file=False):
         result = list(dict())
         for index in range(number_of_objects):
             result.append(dict())
-            for key in KEYS:
+            for key in data.keys():
                 result[index][key] = data[key][index]
         return jsonify(result)
 
