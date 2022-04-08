@@ -50,7 +50,7 @@ def validate_image(stream):
     return(validate_image_header(header))
 
 
-def process_image(image, save_file=False):
+def process_image(image, output_normalisation=False, save_file=False):
     results = MODEL([image])
     if save_file:
         results.render()  # updates results.imgs with boxes and labels
@@ -58,7 +58,10 @@ def process_image(image, save_file=False):
         result.save(image)
         return redirect(url_for('index'))
     else:
-        data = results.pandas().xyxy[0].to_dict('dict')
+        if output_normalisation:
+            data = results.pandas().xywhn[0].to_dict('dict')
+        else:
+            data = results.pandas().xyxy[0].to_dict('dict')
         number_of_objects = len(data['class'])
         result = list(dict())
         for index in range(number_of_objects):
@@ -122,7 +125,10 @@ def inspect_image():
                 abort(415)
 
             image = cv2.imdecode(np.asarray(bytearray(image_body), dtype="uint8"), cv2.IMREAD_COLOR)
-            return process_image(image)
+            if 'normalisation' in content.keys() and content['normalisation'].lower() == 'on':
+                return process_image(image, output_normalisation=True)
+            else:
+                return process_image(image)
     # Fail with 'Unsupported Media Type' error
     abort(415)
 
