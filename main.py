@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import io
 from flask import Flask, render_template, request, redirect, \
     url_for, abort, send_from_directory, jsonify
 import imghdr
@@ -131,7 +132,10 @@ def inspect_image():
                     image_ext != validate_image_header(image_body):
                 abort(415)
 
-            image = cv2.imdecode(np.asarray(bytearray(image_body), dtype="uint8"), cv2.IMREAD_COLOR)
+            # This approach doesn't work too good.
+            # image = cv2.imdecode(np.asarray(bytearray(image_body), dtype="uint8"), cv2.IMREAD_COLOR)
+            
+            image = Image.open(io.BytesIO(image_body))
             if 'normalisation' in content.keys() and content['normalisation'].lower() == 'on':
                 return process_image(image, output_normalisation=True)
             else:
@@ -160,4 +164,4 @@ if __name__ == '__main__':
 
     # init a model and start the application
     MODEL = init_model(MODEL_PATH)
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5000)
